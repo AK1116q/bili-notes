@@ -146,4 +146,7 @@ footer {
   }
 }
 
-.button:focus-within { outline: 3px solid #edb244; outline-offset: 2px; }
+.button:focus-within {
+  outline: 3px solid #edb244;
+  outline-offset: 2px;
+}

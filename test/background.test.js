@@ -97,3 +97,28 @@ test("restore preserves a newer stored record and delete touches only specified 
   assert.ok(!h.data["note:a"]);
   assert.ok(h.data["note:b"]);
 });
+test("expectedUpdatedAt prevents stale edit overwrite and deleted note resurrection", async () => {
+  const h = harness();
+  const saved = await h.send({ type: "save", note: note("a") });
+  await h.send({
+    type: "save",
+    note: { ...saved.data, text: "newer" },
+    expectedUpdatedAt: saved.data.updatedAt,
+  });
+  const stale = await h.send({
+    type: "save",
+    note: { ...saved.data, text: "stale" },
+    expectedUpdatedAt: saved.data.updatedAt,
+  });
+  assert.equal(stale.ok, false);
+  assert.equal(h.data["note:a"].text, "newer");
+  const beforeDelete = h.data["note:a"].updatedAt;
+  await h.send({ type: "delete", id: "a" });
+  const deleted = await h.send({
+    type: "save",
+    note: { ...note("a"), text: "back" },
+    expectedUpdatedAt: beforeDelete,
+  });
+  assert.equal(deleted.ok, false);
+  assert.ok(!h.data["note:a"]);
+});

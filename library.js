@@ -1,6 +1,7 @@
 const $ = (id) => document.getElementById(id);
 let notes = [];
 let generation = 0;
+let editingId = null;
 const status = (text) => {
   $("status").textContent = text;
 };
@@ -31,12 +32,26 @@ async function refresh() {
     const result = await send({ type: "list" });
     if (id !== generation) return;
     notes = result;
+    if (editingId) {
+      status("笔记库已更新，你的编辑内容已保留。");
+      return;
+    }
     render();
   } catch (error) {
     status(error.message);
   }
 }
+function setEditing(id) {
+  editingId = id;
+  $("search").disabled = Boolean(id);
+  $("restore").disabled = Boolean(id);
+  for (const button of document.querySelectorAll(".buttons button"))
+    button.disabled = Boolean(id);
+}
 function render() {
+  editingId = null;
+  $("search").disabled = false;
+  $("restore").disabled = false;
   const values = filtered();
   $("list").replaceChildren();
   $("markdown").disabled = !values.length;
@@ -74,6 +89,8 @@ function render() {
     del.className = "secondary";
     buttons.className = "buttons";
     edit.onclick = () => {
+      if (editingId) return;
+      setEditing(note.id);
       const area = document.createElement("textarea");
       area.value = note.text;
       area.maxLength = 10000;
@@ -85,15 +102,29 @@ function render() {
       save.textContent = "保存";
       cancel.textContent = "取消";
       cancel.className = "secondary";
-      cancel.onclick = render;
+      cancel.onclick = () => {
+        setEditing(null);
+        render();
+      };
       save.onclick = async () => {
         save.disabled = true;
+        cancel.disabled = true;
+        area.readOnly = true;
+        const text = area.value;
         try {
-          await send({ type: "save", note: { ...note, text: area.value } });
+          await send({
+            type: "save",
+            note: { ...note, text },
+            expectedUpdatedAt: note.updatedAt,
+          });
+          setEditing(null);
           await refresh();
         } catch (error) {
           status(error.message);
           save.disabled = false;
+          cancel.disabled = false;
+          area.readOnly = false;
+          area.focus();
         }
       };
       buttons.append(cancel, save);

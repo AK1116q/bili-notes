@@ -140,16 +140,18 @@
     if (!captured && !capture()) return;
     busy = true;
     $("save").disabled = true;
+    $("text").readOnly = true;
+    const draft = $("text").value;
     try {
       const note = api.validateNote({
         ...captured,
         id: crypto.randomUUID(),
-        text: $("text").value,
+        text: draft,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       });
       await send({ type: "save", note });
-      $("text").value = "";
+      if ($("text").value === draft) $("text").value = "";
       captured = null;
       capture();
       status("已保存到本地笔记库。");
@@ -159,6 +161,7 @@
     } finally {
       busy = false;
       $("save").disabled = false;
+      $("text").readOnly = false;
     }
   };
   $("text").addEventListener("keydown", (e) => {

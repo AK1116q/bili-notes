@@ -19,8 +19,18 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     }
     if (message.type === "save") {
       const note = BiliNotes.validateNote(message.note);
-      note.updatedAt = Date.now();
-      await chrome.storage.local.set({ [PREFIX + note.id]: note });
+      const key = PREFIX + note.id;
+      if (Object.hasOwn(message, "expectedUpdatedAt")) {
+        const existing = await chrome.storage.local.get([key]);
+        const current = existing[key];
+        if (current && current.updatedAt !== message.expectedUpdatedAt)
+          throw new Error("这条笔记已被其他页面更新，请刷新后再保存。");
+        if (!current && message.expectedUpdatedAt !== undefined)
+          throw new Error("这条笔记已被删除，请刷新后再保存。");
+        note.createdAt = current?.createdAt ?? note.createdAt;
+        note.updatedAt = Math.max(Date.now(), (current?.updatedAt ?? 0) + 1);
+      } else note.updatedAt = Date.now();
+      await chrome.storage.local.set({ [key]: note });
       return note;
     }
     if (message.type === "delete") {
