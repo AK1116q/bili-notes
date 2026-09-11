@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Bili Notes · 视频时间点笔记",
+  "version": "0.1.0",
+  "description": "在 B 站视频旁记录时间点笔记，点击回看，导出 Markdown。仅本地存储。",
+  "permissions": ["storage"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "打开笔记库", "default_popup": "library.html" },
+  "options_page": "library.html",
+  "content_scripts": [
+    {
+      "matches": ["https://www.bilibili.com/video/*"],
+      "js": ["core.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+:root {
+  font:
+    15px/1.65 "Segoe UI",
+    "Microsoft YaHei",
+    sans-serif;
+  color: #213c48;
+  background: #f4f8fa;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-width: 370px;
+}
+main {
+  max-width: 850px;
+  margin: auto;
+  padding: 28px;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+h1 {
+  margin: 2px 0;
+  font-size: 26px;
+}
+.eyebrow {
+  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #147d97;
+}
+.local {
+  font-size: 12px;
+  color: #147d97;
+  background: #e1f0f3;
+  padding: 4px 9px;
+  border-radius: 15px;
+}
+p {
+  color: #68808c;
+  margin: 8px 0 18px;
+}
+input,
+textarea {
+  width: 100%;
+  font: inherit;
+  border: 1px solid #c9dbe3;
+  background: white;
+  padding: 11px;
+  border-radius: 8px;
+  color: inherit;
+}
+textarea {
+  min-height: 100px;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+button,
+.button {
+  font: inherit;
+  font-size: 13px;
+  border: 0;
+  border-radius: 7px;
+  background: #147d97;
+  color: white;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+.secondary {
+  background: white;
+  border: 1px solid #cbdde4;
+  color: #426675;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #edb244;
+  outline-offset: 2px;
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+#status {
+  font-size: 13px;
+  color: #537784;
+  min-height: 24px;
+}
+.note {
+  background: white;
+  border: 1px solid #dbe6eb;
+  border-radius: 10px;
+  margin: 12px 0;
+  padding: 18px;
+}
+.note h2 {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+  margin: 0 0 8px;
+}
+.note a {
+  color: #147d97;
+}
+.note p {
+  color: #2b4653;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 12px 0;
+}
+.note .meta {
+  font-size: 12px;
+  color: #788d95;
+}
+.note .buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.empty {
+  padding: 40px 10px;
+  text-align: center;
+}
+footer {
+  font-size: 12px;
+  color: #798f99;
+  margin-top: 24px;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@media (min-width: 550px) {
+  body {
+    min-width: 540px;
+  }
+}
+
+.button:focus-within { outline: 3px solid #edb244; outline-offset: 2px; }

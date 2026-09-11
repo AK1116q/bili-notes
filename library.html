@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Bili Notes · 笔记库</title>
+    <link rel="stylesheet" href="library.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <span class="eyebrow">BILI NOTES</span>
+          <h1>我的视频笔记</h1>
+        </div>
+        <span class="local">本地保存</span>
+      </header>
+      <p>把看过的知识，留在时间点上。</p>
+      <label for="search" class="sr">搜索笔记</label
+      ><input id="search" type="search" placeholder="搜索视频标题或笔记内容" />
+      <div class="actions">
+        <button id="markdown">导出筛选结果 Markdown</button
+        ><button id="backup" class="secondary">备份全部 JSON</button
+        ><label class="button secondary"
+          >恢复备份<input id="restore" type="file" accept=".json" class="sr"
+        /></label>
+      </div>
+      <div id="status" role="status" aria-live="polite"></div>
+      <div id="list"></div>
+      <footer>
+        在 B 站视频页按 Alt + Shift + N 记录笔记。<br />卸载扩展会清除本地数据；请定期备份。
+      </footer>
+    </main>
+    <script src="core.js"></script>
+    <script src="library.js"></script>
+  </body>
+</html>
