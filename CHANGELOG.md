@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 — 2026-09-12
+
+- Reworked README in English for a wider GitHub audience.
+- Improved notes library rendering with debounced search, batched DOM insertion, and shared date formatting.
+- Refined the library and video panel styling with clearer depth, hover states, and more polished controls.
+
 ## 0.2.0 — 2026-09-12
 
 - 笔记库编辑时保留草稿，不会被后台同步刷新掉。

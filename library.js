@@ -2,6 +2,11 @@ const $ = (id) => document.getElementById(id);
 let notes = [];
 let generation = 0;
 let editingId = null;
+let searchTimer;
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
 const status = (text) => {
   $("status").textContent = text;
 };
@@ -65,6 +70,7 @@ function render() {
       : "还没有笔记。打开一个 B 站视频，点击右下角「视频笔记」开始。";
     $("list").append(p);
   }
+  const fragment = document.createDocumentFragment();
   for (const note of values) {
     const card = document.createElement("article");
     card.className = "note";
@@ -82,7 +88,7 @@ function render() {
     h.append(a);
     text.textContent = note.text;
     meta.className = "meta";
-    meta.textContent = `${note.videoId} · ${new Date(note.updatedAt).toLocaleString()}`;
+    meta.textContent = `${note.videoId} · ${dateFormatter.format(note.updatedAt)}`;
     edit.textContent = "编辑";
     edit.className = "secondary";
     del.textContent = "删除";
@@ -141,10 +147,14 @@ function render() {
     };
     buttons.append(edit, del);
     card.append(h, text, meta, buttons);
-    $("list").append(card);
+    fragment.append(card);
   }
+  $("list").append(fragment);
 }
-$("search").oninput = render;
+$("search").oninput = () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(render, 80);
+};
 $("markdown").onclick = () =>
   download(
     BiliNotes.toMarkdown(filtered()),

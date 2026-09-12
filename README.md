@@ -2,83 +2,92 @@
 
 [![CI](https://github.com/AK1116q/bili-notes/actions/workflows/ci.yml/badge.svg)](https://github.com/AK1116q/bili-notes/actions/workflows/ci.yml)
 
-**边看视频边记笔记，把想法留在准确的时间点。**
+**Take timestamped notes while watching Bilibili videos.**
 
-A local-first browser extension for timestamped Bilibili video notes. No platform API credentials, no cloud account, no runtime dependencies.
+Bili Notes is a local-first browser extension for timestamped Bilibili video notes. It does not need platform API credentials, a cloud account, or runtime dependencies.
 
-![插件在离线视频夹具中的演示](docs/screenshot.png)
+![Bili Notes demo in an offline fixture](docs/screenshot.png)
 
-> 演示截图使用离线测试页面，不是 B 站实际页面。
+The screenshot uses an offline Bilibili-shaped test page, not the live Bilibili website.
 
-## 功能
+## Features
 
-- 视频页右下角打开笔记面板，记录当前播放时间和笔记内容。
-- 点击笔记时间点回看；保留播放器原来的播放/暂停状态。
-- 按视频与分 P 分别保存，支持页面内切换分 P。
-- 笔记库支持搜索、编辑、删除，以及带时间链接的 Markdown 导出。
-- 编辑已有笔记时会保护草稿，并阻止旧页面覆盖较新的同一条笔记。
-- JSON 全量备份与恢复；相同 ID 优先保留更新时间较新的版本。
-- 数据只存放于当前浏览器的 `chrome.storage.local`。
+- Opens a small notes panel on regular Bilibili video pages.
+- Captures the current video time, page part, title, and note text.
+- Lets you jump back to saved timestamps from the page panel.
+- Stores notes separately by video ID and part number.
+- Provides a notes library with search, edit, delete, Markdown export, JSON backup, and JSON restore.
+- Protects in-progress edits from background refreshes.
+- Prevents stale library pages from overwriting newer edits of the same note.
+- Stores data only in the current browser profile through `chrome.storage.local`.
 
-## 安装
+## Install
 
-1. 下载或克隆本仓库，解压到一个长期保留的目录。
-2. Chrome 打开 `chrome://extensions`；Edge 打开 `edge://extensions`。
-3. 打开 **开发者模式**，选择 **加载已解压的扩展程序**。
-4. 选择包含 `manifest.json` 的 `bili-notes` 目录。
-5. 刷新已打开的 B 站普通视频页面，点击右下角 **视频笔记**。
+1. Download or clone this repository and keep the folder somewhere permanent.
+2. Open `chrome://extensions` in Chrome or `edge://extensions` in Edge.
+3. Enable **Developer mode**.
+4. Choose **Load unpacked**.
+5. Select the folder that contains `manifest.json`.
+6. Refresh an open Bilibili video page and click **Video Notes / 视频笔记** in the lower-right corner.
 
-安装不需要 Node.js。此版本未上架扩展商店。
+Node.js is not required for installation. This version is not published in browser extension stores.
 
-## 使用
+## Usage
 
-- `Alt + Shift + N`：打开面板，并聚焦输入框。部分系统可能占用该组合键，可直接点击按钮。
-- 打开面板时取得当前时间；点击 **重取当前时间** 更新记录位置。
-- `Ctrl + Enter` / `Command + Enter`：在输入框中保存笔记。
-- 点击扩展工具栏图标：打开笔记库。通过扩展详情中的选项页可使用完整页面。
-- **导出筛选结果 Markdown** 只导出当前搜索匹配项；**备份全部 JSON** 保存全部笔记。
+- Press `Alt + Shift + N` to open the panel and focus the note box. Some systems may reserve this shortcut; the floating button still works.
+- Opening the panel captures the current timestamp. Use the recapture button if you want to update the saved time before writing.
+- Press `Ctrl + Enter` or `Command + Enter` inside the text area to save.
+- Click a saved timestamp to seek the current video element.
+- Click the extension toolbar icon to open the notes library.
+- Export Markdown for the current search results, or back up all notes as JSON.
 
-切换分 P 时，已经输入的草稿保留原视频和时间点；面板会给出提示。备注输入上方显示记录所关联的视频，保存前可以重新取时间。
+If you switch parts while a draft is open, the draft is preserved with its original captured timestamp. Recapture before saving if you want the note to point at the new part.
 
-## 权限与隐私
+## Permissions and Privacy
 
-只申请 `storage` 权限，并仅在 `https://www.bilibili.com/video/*` 注入内容脚本。通过页面现有的 HTML 视频元素读取时间，不使用 B 站 Cookie、登录令牌、私有接口或额外网络请求。
+The extension requests only the `storage` permission and injects content scripts only on `https://www.bilibili.com/video/*`. It reads the current time from the existing HTML video element. It does not use Bilibili cookies, login tokens, private APIs, or extra network requests.
 
-笔记包括视频 ID、分 P、时间、标题、正文和创建/修改时间。本地存储并非加密保险箱。卸载扩展会清除数据；请先导出 JSON 备份。恢复功能最多接受 10 MB / 5,000 条笔记。
+Stored notes include video ID, part number, timestamp, title, note text, and created/updated times. Browser local storage is not encrypted secure storage. Uninstalling the extension removes local data, so export a JSON backup first if you want to keep your notes.
 
-## 支持范围与限制
+## Supported Pages and Limits
 
-- 第一版面向 Chrome/Edge Manifest V3 桌面浏览器；自动化集成测试使用 Edge。
-- 支持普通 `/video/BV…` 和 `/video/av…` 页面；不支持直播、番剧 `/bangumi/`、手机 App 或跨站 iframe 播放器。
-- BV 和 av 两种地址按不同标识保存，不调用 API 合并别名。
-- 分 P 按 URL 中的 `p` 参数区分；依赖网站继续提供这些页面结构。
-- 导出的时间链接包含 `p` 和 `t`；目标站点是否采纳跳转参数取决于其当前实现。当前页内点击时间直接设置播放器位置。
-- 无跨设备同步。时间取整到秒，每条笔记最多 10,000 字符。
-- 并发编辑同一笔记会按更新时间检查；检测到较新版本或已删除记录时需要刷新后再保存。
-- 网站播放器结构变化可能需要调整选择器；尚未完成登录后的真实 B 站页面人工验收。
+- Built for desktop Chrome and Edge Manifest V3.
+- Supports regular `/video/BV...` and `/video/av...` pages.
+- Does not support livestreams, `/bangumi/` pages, mobile apps, or cross-site iframe players.
+- BV and av URLs are stored as different identifiers; the extension does not call APIs to merge aliases.
+- Part numbers come from the `p` URL parameter.
+- Timestamp links include `p` and `t`; whether Bilibili honors them depends on the current website behavior.
+- Notes are rounded to whole seconds and limited to 10,000 characters each.
+- Restore accepts backups up to 10 MB and 5,000 notes.
+- Live Bilibili page variants can change, so selectors may need maintenance.
 
-## 开发
+## Development
 
-Node.js 22+，无需安装依赖：
+Requires Node.js 22 or newer. No install step is needed.
 
 ```bash
 npm test
 ```
 
-修改后在浏览器扩展管理页点击重新加载，并刷新视频页。
+After editing the extension, reload it in the browser extensions page and refresh any open video pages.
 
-结构：`core.js` 负责校验、视频标识和 Markdown；`background.js` 串行处理存储消息；`content.js` 提供隔离样式的页面面板；`library.*` 是笔记库。
+Project structure:
 
-实现参考 Chrome 官方 [内容脚本文档](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts) 与 [Storage API](https://developer.chrome.com/docs/extensions/reference/api/storage)。
+- `core.js` validates notes, parses video URLs, formats timestamps, and exports Markdown.
+- `background.js` serializes storage messages.
+- `content.js` renders the isolated video-page panel.
+- `library.*` renders the notes library.
 
-查看 [验证记录](docs/VALIDATION.md) 与 [贡献说明](CONTRIBUTING.md)。
+The implementation follows Chrome extension concepts for [content scripts](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts) and the [Storage API](https://developer.chrome.com/docs/extensions/reference/api/storage).
 
-## 后续方向
+See [validation notes](docs/VALIDATION.md) and [contributing notes](CONTRIBUTING.md).
 
-- 给笔记添加标签，按课程组织。
-- 提供可选择的快捷键配置。
-- 在笔记库中显示冲突详情，辅助合并两份正文。
-- 为更多视频页面增加独立适配器。
+## Roadmap
+
+- Add tags and course-style organization.
+- Add configurable shortcuts.
+- Show conflict details in the notes library so two edited texts can be merged.
+- Add adapters for more Bilibili page types.
 
 ## License
 

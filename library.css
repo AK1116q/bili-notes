@@ -1,10 +1,12 @@
 :root {
   font:
-    15px/1.65 "Segoe UI",
+    15px/1.65 Aptos,
+    "Segoe UI Variable",
+    "Segoe UI",
     "Microsoft YaHei",
     sans-serif;
   color: #213c48;
-  background: #f4f8fa;
+  background: #edf5f7;
 }
 * {
   box-sizing: border-box;
@@ -12,6 +14,9 @@
 body {
   margin: 0;
   min-width: 370px;
+  background:
+    radial-gradient(circle at top right, #ffffff 0 12rem, transparent 28rem),
+    linear-gradient(145deg, #f7fbfc, #e8f2f5 58%, #f4efe5);
 }
 main {
   max-width: 850px;
@@ -25,7 +30,10 @@ header {
 }
 h1 {
   margin: 2px 0;
-  font-size: 26px;
+  font-size: clamp(28px, 6vw, 44px);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-wrap: balance;
 }
 .eyebrow {
   letter-spacing: 2px;
@@ -73,6 +81,20 @@ button,
   color: white;
   padding: 9px 12px;
   cursor: pointer;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
+}
+button:hover,
+.button:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+button:active,
+.button:active {
+  transform: translateY(0);
 }
 .secondary {
   background: white;
@@ -95,11 +117,21 @@ button:disabled {
   min-height: 24px;
 }
 .note {
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid #dbe6eb;
-  border-radius: 10px;
+  border-radius: 14px;
   margin: 12px 0;
   padding: 18px;
+  box-shadow: 0 18px 50px #2d536017;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+.note:hover {
+  border-color: #bfd5dc;
+  box-shadow: 0 20px 60px #2d536022;
+  transform: translateY(-1px);
 }
 .note h2 {
   font-size: 15px;
